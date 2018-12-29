@@ -216,7 +216,7 @@ def main():
         train_log_dir = os.path.join(mconfig.logs,TIMESTAMP) 
         writer = SummaryWriter(train_log_dir)
 
-        optimizer = optim.SGD(model.parameters(),lr = 0.03,momentum=0.9,weight_decay=1e-4)
+        optimizer = optim.SGD(model.parameters(),lr = mconfig.lr,momentum=0.9,weight_decay=1e-4)
         criterion = nn.BCEWithLogitsLoss().cuda()
 
         best_results = [np.inf,0]
@@ -224,7 +224,7 @@ def main():
         
         scheduler = torch.optim.lr_scheduler.StepLR(optimizer,step_size=10,gamma=0.1)
         start = timer()
-        for epoch in range(0,50):
+        for epoch in range(0,mconfig.epoch):
             scheduler.step(epoch)
             train_metrics = train(model,dataloader_sets['train'],criterion,optimizer,epoch,val_metrics,best_results,start,writer)
             print('\r')
